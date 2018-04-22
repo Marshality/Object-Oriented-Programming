@@ -1,7 +1,7 @@
 #include <iostream>
 
 int main(void) {
-	// Pattern tests
+	// Matrix pattern tests
 
 	return 0;
 }
