@@ -58,7 +58,7 @@ Matrix<T>::~Matrix() {
 template<typename T>
 const T &Matrix<T>::operator()(int i, int j) const {
     if (i >= rows || j >= columns || i < 0 || j < 0) {
-        throw std::range_error("Out of range.");
+        throw "Out of range.";
     }
 
     return data[i][j];
@@ -141,7 +141,7 @@ Matrix<T> &Matrix<T>::operator=(const Matrix &other) {
 template<typename T>
 const Matrix<T> Matrix<T>::operator+(const Matrix &other) const {
     if (rows != other.rows || columns != other.columns) {
-        throw -1;
+        throw "Sizes are not equal.";
     }
 
     Matrix<T> temp(rows, columns);
@@ -155,15 +155,130 @@ const Matrix<T> Matrix<T>::operator+(const Matrix &other) const {
     return temp;
 }
 
-//template<typename T>
-//Matrix<T>::Matrix(Matrix &&other) {
-//    this->rows = std::move(other.rows);
-//    this->columns = std::move(other.columns);
-//
-//    this->data = std::move(other.data);
-//    other.data = nullptr;
-//
-//    std::cout << "Move constructor: " << this << std::endl;
-//}
+template<typename T>
+Matrix<T>::Matrix(Matrix &&other) {
+    this->rows = other.rows;
+    this->columns = other.columns;
+    this->data = std::move(other.data);
+
+    other.data = nullptr;
+
+    std::cout << "Move constructor: " << this << std::endl;
+}
+
+template<typename T>
+Matrix<T>::Matrix(int rows, int columns, T value) {
+    this->rows = rows;
+    this->columns = columns;
+
+    data = new T* [rows];
+
+    for (int i = 0; i < rows; i++) {
+        data[i] = new T [columns];
+    }
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            data[i][j] = value;
+        }
+    }
+
+    std::cout << "Matrix constructor: " << this << std::endl;
+}
+
+template<typename T>
+Matrix<T> &Matrix<T>::operator+=(const Matrix &other) {
+    if (rows != other.rows || columns != other.columns) {
+        throw "Sizes are not equal.";
+    }
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            this->data[i][j] += other.data[i][j];
+        }
+    }
+
+    return *this;
+}
+
+template<typename T>
+const Matrix<T> Matrix<T>::operator-(const Matrix &other) const {
+    if (rows != other.rows || columns != other.columns) {
+        throw "Sizes are not equal.";
+    }
+
+    Matrix<T> temp(rows, columns);
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            temp.data[i][j] = data[i][j] - other.data[i][j];
+        }
+    }
+
+    return temp;
+}
+
+template<typename T>
+Matrix<T> &Matrix<T>::operator-=(const Matrix &other) {
+    if (rows != other.rows || columns != other.columns) {
+        throw "Sizes are not equal.";
+    }
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            this->data[i][j] -= other.data[i][j];
+        }
+    }
+
+    return *this;
+}
+
+template<typename T>
+const Matrix<T> Matrix<T>::operator*(const Matrix &other) const {
+    Matrix<T> temp(rows, columns);
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            temp.data[i][j] = data[i][j] * other.data[i][j];
+        }
+    }
+
+    return temp;
+}
+
+template<typename T>
+const Matrix<T> Matrix<T>::operator*(const T value) const {
+    Matrix<T> temp(rows, columns);
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            temp.data[i][j] = data[i][j] * value;
+        }
+    }
+
+    return temp;
+}
+
+template<typename T>
+Matrix<T> &Matrix<T>::operator*=(const Matrix &other) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            this->data[i][j] *= other.data[i][j];
+        }
+    }
+
+    return *this;
+}
+
+template<typename T>
+Matrix<T> &Matrix<T>::operator*=(const T value) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            this->data[i][j] *= value;
+        }
+    }
+
+    return *this;
+}
 
 #endif //PATTERN__MATRIX_H

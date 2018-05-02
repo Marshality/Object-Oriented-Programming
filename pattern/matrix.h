@@ -17,10 +17,11 @@ private:
 public:
     // Конструкторы
     Matrix();
-    Matrix(int rows, int columns);
-    Matrix(int value);
+    Matrix(int rows, int columns); // Стандартный конструктор
+    Matrix(int rows, int columns, T value); // Конструктор заполнения матрицы
+    Matrix(int value); // Конструктор квадратной матрицы
     Matrix(const Matrix &other); // Конструктор копирования
-    //Matrix(Matrix &&other); // Конструктор перемещения
+    Matrix(Matrix &&other); // Конструктор перемещения
 
     // Деструктор
     ~Matrix();
@@ -30,12 +31,28 @@ public:
         data[i][j] = value;
     }
 
-    // Операторы // +; +=; -; -=; *; *=; & - ?
+    void show() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                std::cout << data[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+
+    // Операторы // << - ?
     const T &operator()(int i, int j) const;
     bool operator==(const Matrix &other);
     bool operator!=(const Matrix &other);
     Matrix<T> &operator=(const Matrix &other);
     const Matrix<T> operator+(const Matrix &other) const;
+    Matrix<T> &operator+=(const Matrix &other);
+    const Matrix<T> operator-(const Matrix &other) const;
+    Matrix<T> &operator-=(const Matrix &other);
+    const Matrix<T> operator*(const Matrix &other) const;
+    const Matrix<T> operator*(const T value) const;
+    Matrix<T> &operator*=(const Matrix &other);
+    Matrix<T> &operator*=(const T value);
 };
 
 #endif //PATTERN_MATRIX_H
