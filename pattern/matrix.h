@@ -7,6 +7,7 @@
 
 #include "basematrix.h"
 #include <memory>
+#include <ostream>
 
 template<typename T>
 class Matrix : public BaseMatrix {
@@ -19,15 +20,15 @@ public:
     Matrix();
     Matrix(int rows, int columns); // Стандартный конструктор
     Matrix(int rows, int columns, T value); // Конструктор заполнения матрицы
-    Matrix(int value); // Конструктор квадратной матрицы
-    Matrix(const Matrix &other); // Конструктор копирования
+    explicit Matrix(int value); // Конструктор квадратной матрицы
+    explicit Matrix(const Matrix &other); // Конструктор копирования
     Matrix(Matrix &&other); // Конструктор перемещения
 
     // Деструктор
     ~Matrix();
 
     // Методы
-    void add(T value, int i, int j) {
+    void insert(T value, int i, int j) {
         data[i][j] = value;
     }
 
@@ -50,9 +51,9 @@ public:
     const Matrix<T> operator-(const Matrix &other) const;
     Matrix<T> &operator-=(const Matrix &other);
     const Matrix<T> operator*(const Matrix &other) const;
-    const Matrix<T> operator*(const T value) const;
+    const Matrix<T> operator*(T value) const;
     Matrix<T> &operator*=(const Matrix &other);
-    Matrix<T> &operator*=(const T value);
+    Matrix<T> &operator*=(T value);
 };
 
 #endif //PATTERN_MATRIX_H

@@ -8,26 +8,48 @@
 #include "iterator.h"
 
 template<typename T>
-MatrixIterator<T>::MatrixIterator(const Matrix<T> &data) {
-    this->data = &data;
-    this->current = data(0, 0);
+MyIterator<T>::MyIterator(T *ptr) {
+    pointer = ptr;
 }
 
 template<typename T>
-MatrixIterator<T>::MatrixIterator(const MatrixIterator<T> &iterator) {
-    this->data = iterator.data;
-    this->current = iterator.current;
+T &MyIterator<T>::operator*() {
+    return *pointer;
 }
 
 template<typename T>
-MatrixIterator<T>::~MatrixIterator() {
-    this->data = nullptr;
-    this->current = nullptr;
+T *MyIterator<T>::operator->() {
+    return pointer;
 }
 
 template<typename T>
-void MatrixIterator<T>::begin() {
-    // ...
+T *MyIterator<T>::operator++() {
+    return ++pointer;
+}
+
+template<typename T>
+T *MyIterator<T>::operator--() {
+    return --pointer;
+}
+
+template<typename T>
+T *MyIterator<T>::operator++(int) {
+    return pointer++;
+}
+
+template<typename T>
+T *MyIterator<T>::operator--(int) {
+    return pointer--;
+}
+
+template<typename T>
+bool MyIterator<T>::operator==(const MyIterator &it) {
+    return pointer != it.pointer;
+}
+
+template<typename T>
+bool MyIterator<T>::operator!=(const MyIterator &it) {
+    return pointer == it.pointer;
 }
 
 #endif //PATTERN__ITERATOR_H

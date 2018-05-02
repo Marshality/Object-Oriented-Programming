@@ -5,38 +5,27 @@
 #ifndef PATTERN_ITERATOR_H
 #define PATTERN_ITERATOR_H
 
-#include "matrix.h"
-
-template<typename T> class Matrix;
-
 template<typename T>
-class BaseIterator {
-public:
-    virtual void begin() = 0;
-    virtual void next() = 0;
-    virtual void end() = 0;
-
-protected:
-    T *current;
-};
-
-template<typename T>
-class MatrixIterator : public BaseIterator<T> {
+class MyIterator {
 private:
-    const Matrix<T> *data;
+    T *pointer;
 
 public:
-    // Конструкторы
-    MatrixIterator(const Matrix<T> &data);
-    MatrixIterator(const MatrixIterator<T> &iterator);
+    // Конструктор
+    explicit MyIterator(T *ptr);
 
     // Деструктор
-    ~MatrixIterator();
+    ~MyIterator() = default;
 
-    // Методы
-    void begin();
-    void next();
-    void end();
+    // Операторы
+    T &operator*();
+    T *operator->();
+    T *operator++();
+    T *operator--();
+    T *operator++(int);
+    T *operator--(int);
+    bool operator!=(const MyIterator &it);
+    bool operator==(const MyIterator &it);
 };
 
 #endif //PATTERN_ITERATOR_H
