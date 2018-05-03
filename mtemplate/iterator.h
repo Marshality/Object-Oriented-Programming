@@ -24,8 +24,9 @@ public:
     T *operator--();
     T *operator++(int);
     T *operator--(int);
-    bool operator!=(const MyIterator &it);
+    bool operator<(const MyIterator &it);
     bool operator==(const MyIterator &it);
+    bool operator!=(const MyIterator &it);
 };
 
 #endif //PATTERN_ITERATOR_H

@@ -8,6 +8,7 @@
 #include "basematrix.h"
 #include <memory>
 #include <ostream>
+#include "iterator.h"
 
 template<typename T>
 class Matrix : public BaseMatrix {
@@ -27,22 +28,9 @@ public:
     // Деструктор
     ~Matrix();
 
-    // Методы
-    void insert(T value, int i, int j) {
-        data[i][j] = value;
-    }
-
-    void show() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                std::cout << data[i][j] << " ";
-            }
-            std::cout << std::endl;
-        }
-    }
-
-    // Операторы // << - ?
+    // Операторы
     const T &operator()(int i, int j) const;
+    T* &operator[](int index);
     bool operator==(const Matrix &other);
     bool operator!=(const Matrix &other);
     Matrix<T> &operator=(const Matrix &other);
@@ -54,6 +42,10 @@ public:
     const Matrix<T> operator*(T value) const;
     Matrix<T> &operator*=(const Matrix &other);
     Matrix<T> &operator*=(T value);
+
+    // Методы
+    MyIterator<T> begin();
+    MyIterator<T> end();
 };
 
 #endif //PATTERN_MATRIX_H

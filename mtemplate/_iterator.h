@@ -44,12 +44,17 @@ T *MyIterator<T>::operator--(int) {
 
 template<typename T>
 bool MyIterator<T>::operator==(const MyIterator &it) {
-    return pointer != it.pointer;
+    return pointer == it.pointer;
+}
+
+template<typename T>
+bool MyIterator<T>::operator<(const MyIterator &it) {
+    return pointer < it.pointer;
 }
 
 template<typename T>
 bool MyIterator<T>::operator!=(const MyIterator &it) {
-    return pointer == it.pointer;
+    return pointer != it.pointer;
 }
 
 #endif //PATTERN__ITERATOR_H

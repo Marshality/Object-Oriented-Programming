@@ -21,13 +21,12 @@ Matrix<T>::Matrix(int rows, int columns) {
     this->rows = rows;
     this->columns = columns;
 
-    data = new T* [rows];
+    data = (T**)malloc(rows * sizeof(T*) +
+                       rows * columns * sizeof(T));
 
-    for (int i = 0; i < rows; i++) {
-        data[i] = new T [columns];
-    }
-
-    std::cout << "Matrix constructor: " << this << std::endl;
+    for (int i = 0; i < rows; i++)
+        data[i] = (T*)((char*)data + rows * sizeof(T*) +
+                       i * columns * sizeof(T));
 }
 
 template<typename T>
@@ -35,24 +34,17 @@ Matrix<T>::Matrix(int value) {
     this->rows = value;
     this->columns = value;
 
-    data = new T* [value];
+    data = (T**)malloc(value * sizeof(T*) +
+                       value * value * sizeof(T));
 
-    for (int i = 0; i < value; i++) {
-        data[i] = new T [value];
-    }
-
-    std::cout << "Matrix constructor: " << this << std::endl;
+    for (int i = 0; i < value; i++)
+        data[i] = (T*)((char*)value + value * sizeof(T*) +
+                       i * value * sizeof(T));
 }
 
 template<typename T>
 Matrix<T>::~Matrix() {
-    for (int i = 0; i < rows; i++) {
-        delete[] data[i];
-    }
-
     delete[] data;
-
-    std::cout << "Destructor: " << this << std::endl;
 }
 
 template<typename T>
@@ -69,19 +61,18 @@ Matrix<T>::Matrix(const Matrix &other) {
     this->rows = other.rows;
     this->columns = other.columns;
 
-    this->data = new T* [other.rows];
+    this->data = (T**)malloc(other.rows * sizeof(T*) +
+                             other.rows * other.columns * sizeof(T));
 
-    for (int i = 0; i < other.rows; i++) {
-        this->data[i] = new T [other.columns];
-    }
+    for (int i = 0; i < rows; i++)
+        this->data[i] = (T*)((char*)this->data + other.rows * sizeof(T*) +
+                             i * other.columns * sizeof(T));
 
     for (int i = 0; i < other.rows; i++) {
         for (int j = 0; j < other.columns; j++) {
             this->data[i][j] = other.data[i][j];
         }
     }
-
-    std::cout << "Copy constructor: " << this << std::endl;
 }
 
 template<typename T>
@@ -121,19 +112,18 @@ Matrix<T> &Matrix<T>::operator=(const Matrix &other) {
     this->rows = other.rows;
     this->columns = other.columns;
 
-    this->data = new T* [other.rows];
+    this->data = (T**)malloc(other.rows * sizeof(T*) +
+                       other.rows * other.columns * sizeof(T));
 
-    for (int i = 0; i < other.rows; i++) {
-        this->data[i] = new T [other.columns];
-    }
+    for (int i = 0; i < rows; i++)
+        this->data[i] = (T*)((char*)this->data + other.rows * sizeof(T*) +
+                       i * other.columns * sizeof(T));
 
     for (int i = 0; i < other.rows; i++) {
         for (int j = 0; j < other.columns; j++) {
             this->data[i][j] = other.data[i][j];
         }
     }
-
-    std::cout << "= operator: " << this << std::endl;
 
     return *this;
 }
@@ -162,8 +152,6 @@ Matrix<T>::Matrix(Matrix &&other) {
     this->data = std::move(other.data);
 
     other.data = nullptr;
-
-    std::cout << "Move constructor: " << this << std::endl;
 }
 
 template<typename T>
@@ -171,19 +159,18 @@ Matrix<T>::Matrix(int rows, int columns, T value) {
     this->rows = rows;
     this->columns = columns;
 
-    data = new T* [rows];
+    data = (T**)malloc(rows * sizeof(T*) +
+                  rows * columns * sizeof(T));
 
-    for (int i = 0; i < rows; i++) {
-        data[i] = new T [columns];
-    }
+    for (int i = 0; i < rows; i++)
+        data[i] = (T*)((char*)data + rows * sizeof(T*) +
+                           i * columns * sizeof(T));
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
             data[i][j] = value;
         }
     }
-
-    std::cout << "Matrix constructor: " << this << std::endl;
 }
 
 template<typename T>
@@ -279,6 +266,25 @@ Matrix<T> &Matrix<T>::operator*=(const T value) {
     }
 
     return *this;
+}
+
+template<typename T>
+MyIterator<T> Matrix<T>::end() {
+    return MyIterator<T>(&this->data[rows - 1][columns - 1]);
+}
+
+template<typename T>
+MyIterator<T> Matrix<T>::begin() {
+    return MyIterator<T>(&this->data[0][0]);
+}
+
+template<typename T>
+T* &Matrix<T>::operator[](int index) {
+    if (index >= rows || index >= columns || index < 0 || index < 0) {
+        throw "Out of range.";
+    }
+
+    return data[index];
 }
 
 #endif //PATTERN__MATRIX_H

@@ -1,16 +1,48 @@
 #include <iostream>
 #include "_matrix.h"
+#include "_iterator.h"
 
 int main() {
-    Matrix<int> m(3, 3, 2);
-    Matrix<int> m2(3, 3, 3);
+    Matrix<int> m(3, 3, 8);
+    Matrix<int> m2(m);
 
-    m2 = m;
+    std::cout << "\nIndex:\n" << std::endl;
 
-    m2 *= 10;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            std::cout << m[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
 
-    m2.insert(8, 1, 1);
-    m2.show();
+    std::cout << std::endl;
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            std::cout << &m[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    std::cout << "\nIterator:\n" << std::endl;
+
+    for (auto it = m.begin(); it < m.end(); it++) {
+        std::cout << *it << " ";
+        it++;
+        std::cout << *it << " ";
+        it++;
+        std::cout << *it << std::endl;
+    }
+
+    std::cout << std::endl;
+
+    for (auto it = m.begin(); it < m.end(); it++) {
+        std::cout << &*it << " ";
+        it++;
+        std::cout << &*it << " ";
+        it++;
+        std::cout << &*it << std::endl;
+    }
 
     return 0;
 }
