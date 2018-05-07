@@ -16,8 +16,8 @@ private:
     int rows, columns;
     T **data;
 
-protected:
-    void allocator();
+    // Выделение памяти
+    T** allocator();
 
 public:
     // Конструкторы

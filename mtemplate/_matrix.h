@@ -21,7 +21,7 @@ Matrix<T>::Matrix(int rows, int columns) {
     this->rows = rows;
     this->columns = columns;
 
-    allocator();
+    this->data = this->allocator();
 }
 
 template<typename T>
@@ -29,7 +29,7 @@ Matrix<T>::Matrix(int value) {
     this->rows = value;
     this->columns = value;
 
-    allocator();
+    this->data = this->allocator();
 }
 
 template<typename T>
@@ -51,7 +51,7 @@ Matrix<T>::Matrix(const Matrix &other) {
     this->rows = other.rows;
     this->columns = other.columns;
 
-    allocator();
+    this->data = this->allocator();
 
     for (int i = 0; i < other.rows; i++) {
         for (int j = 0; j < other.columns; j++) {
@@ -99,7 +99,7 @@ Matrix<T> &Matrix<T>::operator=(const Matrix &other) {
     this->rows = other.rows;
     this->columns = other.columns;
 
-    allocator();
+    this->data = this->allocator();
 
     for (int i = 0; i < other.rows; i++) {
         for (int j = 0; j < other.columns; j++) {
@@ -141,7 +141,7 @@ Matrix<T>::Matrix(int rows, int columns, T value) {
     this->rows = rows;
     this->columns = columns;
 
-    allocator();
+    this->data = this->allocator();
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
@@ -265,13 +265,15 @@ T* &Matrix<T>::operator[](int index) {
 }
 
 template<typename T>
-void Matrix<T>::allocator() {
+T **Matrix<T>::allocator() {
     data = (T**)malloc(rows * sizeof(T*) +
                        rows * columns * sizeof(T));
 
     for (int i = 0; i < rows; i++)
         data[i] = (T*)((char*)data + rows * sizeof(T*) +
                        i * columns * sizeof(T));
+
+    return this->data;
 }
 
 #endif //PATTERN__MATRIX_H
