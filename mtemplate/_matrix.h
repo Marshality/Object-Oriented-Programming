@@ -44,7 +44,8 @@ Matrix<T>::Matrix(int value) {
 
 template<typename T>
 Matrix<T>::~Matrix() {
-    delete[] data;
+    //delete[] data;
+    free(data);
 }
 
 template<typename T>
