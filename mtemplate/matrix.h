@@ -16,6 +16,9 @@ private:
     int rows, columns;
     T **data;
 
+protected:
+    void allocator();
+
 public:
     // Конструкторы
     Matrix();

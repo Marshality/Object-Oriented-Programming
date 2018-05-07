@@ -21,12 +21,7 @@ Matrix<T>::Matrix(int rows, int columns) {
     this->rows = rows;
     this->columns = columns;
 
-    data = (T**)malloc(rows * sizeof(T*) +
-                       rows * columns * sizeof(T));
-
-    for (int i = 0; i < rows; i++)
-        data[i] = (T*)((char*)data + rows * sizeof(T*) +
-                       i * columns * sizeof(T));
+    allocator();
 }
 
 template<typename T>
@@ -34,17 +29,11 @@ Matrix<T>::Matrix(int value) {
     this->rows = value;
     this->columns = value;
 
-    data = (T**)malloc(value * sizeof(T*) +
-                       value * value * sizeof(T));
-
-    for (int i = 0; i < value; i++)
-        data[i] = (T*)((char*)value + value * sizeof(T*) +
-                       i * value * sizeof(T));
+    allocator();
 }
 
 template<typename T>
 Matrix<T>::~Matrix() {
-    //delete[] data;
     free(data);
 }
 
@@ -62,12 +51,7 @@ Matrix<T>::Matrix(const Matrix &other) {
     this->rows = other.rows;
     this->columns = other.columns;
 
-    this->data = (T**)malloc(other.rows * sizeof(T*) +
-                             other.rows * other.columns * sizeof(T));
-
-    for (int i = 0; i < rows; i++)
-        this->data[i] = (T*)((char*)this->data + other.rows * sizeof(T*) +
-                             i * other.columns * sizeof(T));
+    allocator();
 
     for (int i = 0; i < other.rows; i++) {
         for (int j = 0; j < other.columns; j++) {
@@ -78,30 +62,32 @@ Matrix<T>::Matrix(const Matrix &other) {
 
 template<typename T>
 bool Matrix<T>::operator==(const Matrix &other) {
+    bool flag = true;
+
     if (this->rows == other.rows && this->columns == other.columns) {
-        for (int i = 0; i < this->rows; i++) {
+        for (int i = 0; i < this->rows && flag; i++) {
             for (int j = 0; j < this->columns; j++) {
-                if (this->data[i][j] != other.data[i][j]) return false;
+                if (this->data[i][j] != other.data[i][j]) flag = false;
             }
         }
-        return true;
-    } else {
-        return false;
-    }
+    } else flag = false;
+
+    return flag;
 }
 
 template<typename T>
 bool Matrix<T>::operator!=(const Matrix &other) {
+    bool flag = false;
+
     if (this->rows == other.rows && this->columns == other.columns) {
-        for (int i = 0; i < this->rows; i++) {
+        for (int i = 0; i < this->rows && !flag; i++) {
             for (int j = 0; j < this->columns; j++) {
-                if (this->data[i][j] != other.data[i][j]) return true;
+                if (this->data[i][j] != other.data[i][j]) flag = true;
             }
         }
-        return false;
-    } else {
-        return true;
-    }
+    } else flag = true;
+
+    return flag;
 }
 
 template<typename T>
@@ -113,12 +99,7 @@ Matrix<T> &Matrix<T>::operator=(const Matrix &other) {
     this->rows = other.rows;
     this->columns = other.columns;
 
-    this->data = (T**)malloc(other.rows * sizeof(T*) +
-                       other.rows * other.columns * sizeof(T));
-
-    for (int i = 0; i < rows; i++)
-        this->data[i] = (T*)((char*)this->data + other.rows * sizeof(T*) +
-                       i * other.columns * sizeof(T));
+    allocator();
 
     for (int i = 0; i < other.rows; i++) {
         for (int j = 0; j < other.columns; j++) {
@@ -160,12 +141,7 @@ Matrix<T>::Matrix(int rows, int columns, T value) {
     this->rows = rows;
     this->columns = columns;
 
-    data = (T**)malloc(rows * sizeof(T*) +
-                  rows * columns * sizeof(T));
-
-    for (int i = 0; i < rows; i++)
-        data[i] = (T*)((char*)data + rows * sizeof(T*) +
-                           i * columns * sizeof(T));
+    allocator();
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
@@ -286,6 +262,16 @@ T* &Matrix<T>::operator[](int index) {
     }
 
     return data[index];
+}
+
+template<typename T>
+void Matrix<T>::allocator() {
+    data = (T**)malloc(rows * sizeof(T*) +
+                       rows * columns * sizeof(T));
+
+    for (int i = 0; i < rows; i++)
+        data[i] = (T*)((char*)data + rows * sizeof(T*) +
+                       i * columns * sizeof(T));
 }
 
 #endif //PATTERN__MATRIX_H
