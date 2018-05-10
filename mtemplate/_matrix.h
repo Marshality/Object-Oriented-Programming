@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include "matrix.h"
 #include <iostream>
+#include "exceptions.h"
 
 template<typename T>
 Matrix<T>::Matrix() {
@@ -40,7 +41,7 @@ Matrix<T>::~Matrix() {
 template<typename T>
 const T &Matrix<T>::operator()(int i, int j) const {
     if (i >= rows || j >= columns || i < 0 || j < 0) {
-        throw "Out of range.";
+        throw OutOfRangeException();
     }
 
     return data[i][j];
@@ -113,7 +114,7 @@ Matrix<T> &Matrix<T>::operator=(const Matrix &other) {
 template<typename T>
 const Matrix<T> Matrix<T>::operator+(const Matrix &other) const {
     if (rows != other.rows || columns != other.columns) {
-        throw "Sizes are not equal.";
+        throw NotEqualSizesException();
     }
 
     Matrix<T> temp(rows, columns);
@@ -137,23 +138,9 @@ Matrix<T>::Matrix(Matrix &&other) {
 }
 
 template<typename T>
-Matrix<T>::Matrix(int rows, int columns, T value) {
-    this->rows = rows;
-    this->columns = columns;
-
-    this->data = this->allocator();
-
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
-            data[i][j] = value;
-        }
-    }
-}
-
-template<typename T>
 Matrix<T> &Matrix<T>::operator+=(const Matrix &other) {
     if (rows != other.rows || columns != other.columns) {
-        throw "Sizes are not equal.";
+        throw NotEqualSizesException();
     }
 
     for (int i = 0; i < rows; i++) {
@@ -168,7 +155,7 @@ Matrix<T> &Matrix<T>::operator+=(const Matrix &other) {
 template<typename T>
 const Matrix<T> Matrix<T>::operator-(const Matrix &other) const {
     if (rows != other.rows || columns != other.columns) {
-        throw "Sizes are not equal.";
+        throw NotEqualSizesException();
     }
 
     Matrix<T> temp(rows, columns);
@@ -185,7 +172,7 @@ const Matrix<T> Matrix<T>::operator-(const Matrix &other) const {
 template<typename T>
 Matrix<T> &Matrix<T>::operator-=(const Matrix &other) {
     if (rows != other.rows || columns != other.columns) {
-        throw "Sizes are not equal.";
+        throw NotEqualSizesException();
     }
 
     for (int i = 0; i < rows; i++) {
@@ -256,15 +243,6 @@ MyIterator<T> Matrix<T>::begin() {
 }
 
 template<typename T>
-T* &Matrix<T>::operator[](int index) {
-    if (index >= rows || index >= columns || index < 0 || index < 0) {
-        throw "Out of range.";
-    }
-
-    return data[index];
-}
-
-template<typename T>
 T **Matrix<T>::allocator() {
     data = (T**)malloc(rows * sizeof(T*) +
                        rows * columns * sizeof(T));
@@ -274,6 +252,66 @@ T **Matrix<T>::allocator() {
                        i * columns * sizeof(T));
 
     return this->data;
+}
+
+template<typename T>
+Matrix<T>::Matrix(const std::initializer_list<std::initializer_list<T>> &list) {
+    this->rows = static_cast<int>(list.size());
+    this->columns = static_cast<int>(list.begin()->size());
+
+    this->data = this->allocator();
+
+    int i, j = 0;
+    for (const auto &l : list) {
+        for (const auto &value : l) {
+            data[i][j] = value;
+            j++;
+        }
+        i++;
+        j = 0;
+    }
+}
+
+template<typename T>
+T &Matrix<T>::operator()(int i, int j) {
+    return data[i][j];
+}
+
+template<typename T>
+Matrix<T> &Matrix<T>::operator=(Matrix &&other) noexcept {
+    if (this->data) {
+        free(data);
+    }
+
+    this->rows = other.rows;
+    this->columns = other.columns;
+    this->data = std::move(other.data);
+
+    other.data = nullptr;
+
+    return *this;
+}
+
+template<typename T>
+MyArray<T> &Matrix<T>::operator[](int index) {
+    MyArray<T> array(this->rows);
+
+    for (int i = 0; i < this->columns; i++){
+        array[i] = data[index][i];
+    }
+
+    return array;
+}
+
+template<typename T>
+const MyArray<T> &Matrix<T>::operator[](int index) const {
+    MyArray<T> array(this->rows);
+
+    for (int i = 0; i < this->columns; i++){
+        array[i] = data[index][i];
+    }
+
+    return array;
 }
 
 #endif //PATTERN__MATRIX_H

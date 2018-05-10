@@ -8,7 +8,7 @@
 class BaseMatrix {
 public:
     BaseMatrix() = default;
-    ~BaseMatrix() = default;
+    virtual ~BaseMatrix() = default;
 };
 
 #endif //PATTERN_BASEMATRIX_H
