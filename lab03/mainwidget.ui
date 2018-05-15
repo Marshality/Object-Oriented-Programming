@@ -62,7 +62,7 @@
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">#loaButton {
+       <string notr="true">#loadButton {
 background: grey; 
 color: pink;
  font-family: Menlo;

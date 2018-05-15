@@ -4,9 +4,9 @@ project(lab03)
 set(CMAKE_CXX_STANDARD 17)
 
 set(SOURCE_FILES main.cpp mainwidget.cpp mainwidget.h mainwidget.ui parser.h model/point.h
-                                        model/edge.h ./vtemplate model/model.h exceptions.h)
+        model/edge.h model/model.h exceptions.h vector/vector.h vector/_vector.h viewer.h)
 
-set(CMAKE_CXX_FLAGS '-Wall')
+set(CMAKE_CXX_FLAGS)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)

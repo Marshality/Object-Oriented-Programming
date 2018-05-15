@@ -6,12 +6,12 @@
 #define LAB03_FILE_H
 
 #include "stdio.h"
-#include "model/model.h"
+#include "./model/model.h"
+#include <iostream>
 #include "exceptions.h"
 
 class Parser {
 private:
-    char *filename;
     FILE *file;
 
     Point loadPoint() {
@@ -33,36 +33,24 @@ private:
     }
 
 public:
-    Parser(char *filename) {
-        this->filename = filename;
-        this->file = fopen(filename, "r");
-    }
+    Parser(char *filename) { this->file = fopen(filename, "r"); }
+    ~Parser() { fclose(file); }
 
-    ~Parser() { fclose(this->file); }
-
-    int parse(Model *mdl) {
+    void parse(Model *model) {
         int pointsCount = 0, edgesCount = 0;
 
-        if (fscanf(file, "%d %d", &pointsCount, &edgesCount) != 2) return -1;
+        if (fscanf(file, "%d %d", &pointsCount, &edgesCount) != 2) throw corruptFileException();
 
-        std::vector<Point> points;
-        std::vector<Edge> edges;
+        MyVector<Point> points(pointsCount);
+        MyVector<Edge> edges(edgesCount);
 
-        points.reserve(pointsCount);
-        edges.reserve(edgesCount);
-
-        for (int i = 0; i < pointsCount; i++) {
+        for (int i = 0; i < pointsCount; i++)
             points[i] = loadPoint();
-            std::cout << points[i].get_x() << " " << points[i].get_y() << " " << points[i].get_z() << std::endl;
-        }
-        for (int i = 0; i < edgesCount; i++) {
+
+        for (int i = 0; i < edgesCount; i++)
             edges[i] = loadEdge();
-            std::cout << edges[i].get_a() << " " << edges[i].get_b() << std::endl;
-        }
 
-        mdl = new Model(points, edges);
-
-        return 0;
+        model = new Model(points, edges);
     }
 };
 

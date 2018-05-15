@@ -10,6 +10,8 @@ private:
     double x, y, z;
 
 public:
+    Point() = default;
+
     Point(double x, double y, double z) {
         this->x = x;
         this->y = y;

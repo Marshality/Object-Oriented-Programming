@@ -7,21 +7,23 @@
 
 #include "point.h"
 #include "edge.h"
-#include "../vtemplate/vector.h"
+#include "../vector/_vector.h"
 #include <vector>
 
 class Model {
 private:
-    std::vector<Point> points;
-    std::vector<Edge> edges;
+    MyVector<Point> points;
+    MyVector<Edge> edges;
 
 public:
     Model() = default;
 
-    Model(std::vector<Point> points, std::vector<Edge> edges) {
+    Model(MyVector<Point> points, MyVector<Edge> edges) {
         this->points = points;
         this->edges = edges;
     }
+
+    ~Model() = default;
 };
 
 #endif //LAB03_MODEL_H

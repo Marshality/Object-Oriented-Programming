@@ -8,8 +8,7 @@
 #include <QFileDialog>
 
 #include <iostream>
-
-#include "parser.h"
+#include "viewer.h"
 
 #define WIDTH 1000
 #define HEIGHT 1000
@@ -42,7 +41,10 @@ void mainwidget::on_loadButton_clicked() {
 
     puts(filename);
 
-    Model mdl;
-
-    int e = Parser(filename).parse(&mdl);
+    Receiver rec(filename);
+    try {
+        rec.loadModel();
+    } catch (corruptFileException &e) {
+        std::cerr << e.what() << std::endl;
+    }
 }
