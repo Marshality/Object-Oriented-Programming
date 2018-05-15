@@ -12,4 +12,9 @@ public:
     const char* what() const noexcept override { return "Corrupt file."; }
 };
 
+class memoryAllocationException : public std::exception {
+public:
+    const char* what() const noexcept override { return "Allocation error."; }
+};
+
 #endif //EXCEPTIONS_H

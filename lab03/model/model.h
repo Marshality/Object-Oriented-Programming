@@ -9,6 +9,7 @@
 #include "edge.h"
 #include "../vector/_vector.h"
 #include <vector>
+#include "../canvas/canvas.h"
 
 class Model {
 private:
@@ -22,6 +23,15 @@ public:
         this->points = points;
         this->edges = edges;
     }
+
+    MyVector<Point> getPoints() { return points; }
+    MyVector<Edge> getEdges() { return edges; }
+//
+//    void draw(MyCanvas *canvas) {
+//        for (int i = 0; i < edges.getSize(); i++) {
+//            canvas->drawLine(points[i])
+//        }
+//    }
 
     ~Model() = default;
 };

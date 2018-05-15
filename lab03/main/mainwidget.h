@@ -6,7 +6,8 @@
 #define LAB03_MAINWIDGET_H
 
 #include <QMainWindow>
-#include <QGraphicsScene>
+#include "../canvas/canvas.h"
+#include "../viewer.h"
 
 namespace Ui {
     class mainwidget;
@@ -24,7 +25,9 @@ private slots:
 
 private:
     Ui::mainwidget *ui;
-    QGraphicsScene *scene;
+    Receiver receiver;
+    Drawer drawer;
+    MyCanvas<QGraphicsScene> canvas = new QGraphicsScene();
 };
 
 

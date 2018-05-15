@@ -5,67 +5,27 @@
 #ifndef LAB03_VIEWER_H
 #define LAB03_VIEWER_H
 
-#include "parser.h"
-
-//class Singleton {
-//private:
-//    static Singleton *self;
-//    Singleton() {}
-//    virtual ~Singleton() {}
-//
-//    Model *model;
-//
-//public:
-//    static Singleton* instance() {
-//        if (!self) self = new Singleton();
-//        return self;
-//    }
-//
-//    void saveModel(Model *model) {
-//        this->model = model;
-//    }
-//
-//    Model& getModel() {
-//        return *model;
-//    }
-//};
-
-template<typename T>
-class Command {
-protected:
-    T *object;
-
-public:
-    virtual ~Command() {}
-    virtual void execute() = 0;
-};
-
-class LoadModelCmd : public Command<Parser> {
-private:
-    Model *model;
-
-public:
-    LoadModelCmd(Model *_model, char *_filename) : model(_model) { object = new Parser(_filename); }
-
-    void execute() {
-        object->parse(model);
-    }
-};
+#include "command/commands.h"
+#include "canvas/drawer.h"
 
 class Receiver { // 3DViewer
 private:
     Command<Parser> *p_command;
     Command<Model> *m_command;
+    Command<Drawer> *d_command;
     Model model;
-    char *filename;
 
 public:
-    Receiver() {}
-    Receiver(char *_filename) : filename(_filename), model(Model()) {}
+    Receiver() = default;
 
-    void loadModel() {
+    void loadModel(char *filename) {
         p_command = new LoadModelCmd(&model, filename);
         p_command->execute();
+    }
+
+    void drawModel(MyCanvas<QGraphicsScene> *canvas, Drawer drawer) {
+        d_command = new DrawModelCmd(&model, canvas);
+        d_command->execute();
     }
 };
 

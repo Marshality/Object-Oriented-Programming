@@ -3,12 +3,13 @@
 //
 
 #include "mainwidget.h"
-#include "./cmake-build-debug/lab03_autogen/include/ui_mainwidget.h"
+#include "ui_mainwidget.h"
 
 #include <QFileDialog>
 
 #include <iostream>
-#include "viewer.h"
+#include "../viewer.h"
+#include "../canvas/drawer.h"
 
 #define WIDTH 1000
 #define HEIGHT 1000
@@ -20,11 +21,14 @@ mainwidget::mainwidget(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("Lab03");
 
-    scene = new QGraphicsScene();
-    ui->graphicsView->centerOn(0, 0);
-    ui->graphicsView->setScene(scene);
+    drawer = Drawer(&canvas);
 
-    scene->setSceneRect(-WIDTH, -HEIGHT, WIDTH * 2, HEIGHT * 2);
+    ui->graphicsView->centerOn(0, 0);
+    ui->graphicsView->setScene(canvas.scene());
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    canvas.scene()->setSceneRect(-WIDTH, -HEIGHT, WIDTH * 2, HEIGHT * 2);
 }
 
 mainwidget::~mainwidget() {
@@ -41,10 +45,11 @@ void mainwidget::on_loadButton_clicked() {
 
     puts(filename);
 
-    Receiver rec(filename);
     try {
-        rec.loadModel();
+        receiver.loadModel(filename);
+        receiver.drawModel(&canvas, drawer);
     } catch (corruptFileException &e) {
         std::cerr << e.what() << std::endl;
     }
+
 }

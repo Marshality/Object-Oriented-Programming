@@ -36,7 +36,7 @@ public:
     Parser(char *filename) { this->file = fopen(filename, "r"); }
     ~Parser() { fclose(file); }
 
-    void parse(Model *model) {
+    void parse(Model &model) {
         int pointsCount = 0, edgesCount = 0;
 
         if (fscanf(file, "%d %d", &pointsCount, &edgesCount) != 2) throw corruptFileException();
@@ -44,13 +44,11 @@ public:
         MyVector<Point> points(pointsCount);
         MyVector<Edge> edges(edgesCount);
 
-        for (int i = 0; i < pointsCount; i++)
-            points[i] = loadPoint();
+        for (int i = 0; i < pointsCount; i++) points[i] = loadPoint();
 
-        for (int i = 0; i < edgesCount; i++)
-            edges[i] = loadEdge();
+        for (int i = 0; i < edgesCount; i++) edges[i] = loadEdge();
 
-        model = new Model(points, edges);
+        model = Model(points, edges);
     }
 };
 

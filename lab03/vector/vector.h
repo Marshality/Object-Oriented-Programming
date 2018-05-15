@@ -23,6 +23,9 @@ public:
     // Операторы
     T &operator[](int index);
     MyVector<T> &operator=(const MyVector &other);
+
+    // Методы
+    int getSize() { return size; }
 };
 
 #endif //LAB03_VECTOR_H

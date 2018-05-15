@@ -6,6 +6,7 @@
 #define LAB03__VECTOR_H
 
 #include "vector.h"
+#include "../exceptions.h"
 
 template<typename T>
 MyVector<T>::MyVector(int size) {
