@@ -22,6 +22,9 @@ public:
 
 private slots:
     void on_loadButton_clicked();
+    void on_rotateButton_clicked();
+    void on_scaleButton_clicked();
+    void on_moveButton_clicked();
 
 private:
     Ui::mainwidget *ui;

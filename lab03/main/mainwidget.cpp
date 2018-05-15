@@ -51,5 +51,19 @@ void mainwidget::on_loadButton_clicked() {
     } catch (corruptFileException &e) {
         std::cerr << e.what() << std::endl;
     }
+}
 
+void mainwidget::on_rotateButton_clicked() {
+    receiver.rotateModel(3, 0, 3);
+    receiver.drawModel(&canvas, drawer);
+}
+
+void mainwidget::on_scaleButton_clicked() {
+    receiver.scaleModel(1.1);
+    receiver.drawModel(&canvas, drawer);
+}
+
+void mainwidget::on_moveButton_clicked() {
+    receiver.moveModel(1, 0, 0);
+    receiver.drawModel(&canvas, drawer);
 }

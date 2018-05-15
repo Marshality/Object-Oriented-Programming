@@ -7,8 +7,6 @@
 
 #include "canvas.h"
 #include "../vector/vector.h"
-#include "../model/point.h"
-#include "../model/edge.h"
 #include "../model/model.h"
 
 class Drawer {
@@ -21,8 +19,8 @@ public:
     ~Drawer() = default;
 
     void drawEdge(MyVector<Point> points, Edge edge) {
-        canvas->drawLine(points[edge.get_a()].get_x(), points[edge.get_a()].get_y(), \
-                        points[edge.get_b()].get_x(), points[edge.get_b()].get_y());
+        canvas->drawLine(points[edge.getA()].getX(), points[edge.getA()].getY(), \
+                        points[edge.getB()].getX(), points[edge.getB()].getY());
     }
 
     void drawEdges(MyVector<Point> points, MyVector<Edge> edges) {

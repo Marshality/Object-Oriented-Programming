@@ -17,9 +17,8 @@ public:
         this->b = b;
     }
 
-    int get_a() { return this->a; }
-
-    int get_b() { return this->b; }
+    int getA() { return this->a; }
+    int getB() { return this->b; }
 };
 
 #endif //LAB03_EDGE_H

@@ -18,11 +18,13 @@ public:
         this->z = z;
     }
 
-    double get_x() { return this->x; }
+    double getX() { return this->x; }
+    double getY() { return this->y; }
+    double getZ() { return this->z; }
 
-    double get_y() { return this->y; }
-
-    double get_z() { return this->z; }
+    void setX(double x) { this->x = x; }
+    void setY(double y) { this->y = y; }
+    void setZ(double z) { this->z = z; }
 };
 
 #endif //LAB03_POINT_H
