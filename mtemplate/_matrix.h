@@ -35,6 +35,10 @@ Matrix<T>::Matrix(int value) {
 
 template<typename T>
 Matrix<T>::~Matrix() {
+<<<<<<< HEAD
+=======
+    //delete[] data;
+>>>>>>> lab03
     free(data);
 }
 
