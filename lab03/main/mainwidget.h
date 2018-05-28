@@ -6,7 +6,7 @@
 #define LAB03_MAINWIDGET_H
 
 #include <QMainWindow>
-#include "../canvas/canvas.h"
+#include "../canvas/QtCanvas.h"
 #include "../viewer.h"
 
 namespace Ui {
@@ -30,7 +30,7 @@ private:
     Ui::mainwidget *ui;
     Receiver receiver;
     Drawer drawer;
-    MyCanvas<QGraphicsScene> canvas = new QGraphicsScene();
+    QtCanvas *canvas = new QtCanvas(new QGraphicsScene);
 };
 
 

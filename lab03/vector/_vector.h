@@ -6,12 +6,14 @@
 #define LAB03__VECTOR_H
 
 #include "vector.h"
-#include "../exceptions.h"
+#include "../exception/exceptions.h"
 
 template<typename T>
 MyVector<T>::MyVector(int size) {
     this->size = size;
     this->data = new T [size];
+
+    if (!data) throw memoryAllocationException();
 }
 
 template<typename T>

@@ -5,17 +5,18 @@
 #ifndef LAB03_DRAWER_H
 #define LAB03_DRAWER_H
 
-#include "canvas.h"
+#include "BaseCanvas.h"
 #include "../vector/vector.h"
-#include "../model/model.h"
+#include "../model/point.h"
+#include "../model/edge.h"
 
 class Drawer {
 private:
-    MyCanvas<QGraphicsScene> *canvas;
+    MyCanvas *canvas;
 
 public:
     Drawer() = default;
-    Drawer(MyCanvas<QGraphicsScene> *_canvas) : canvas(_canvas) {}
+    Drawer(MyCanvas *_canvas) : canvas(_canvas) {}
     ~Drawer() = default;
 
     void drawEdge(MyVector<Point> points, Edge edge) {
@@ -25,11 +26,6 @@ public:
 
     void drawEdges(MyVector<Point> points, MyVector<Edge> edges) {
         for (int i = 0; i < edges.getSize(); i++) drawEdge(points, edges[i]);
-    }
-
-    void drawModel(Model *model) {
-        canvas->sceneClear();
-        drawEdges(model->getPoints(), model->getEdges());
     }
 };
 

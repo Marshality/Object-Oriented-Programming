@@ -5,13 +5,12 @@
 #ifndef LAB03_BASECOMMAND_H
 #define LAB03_BASECOMMAND_H
 
-template<typename T>
-class Command {
-protected:
-    T *object;
+#include "../model/BaseModel.h"
+#include "../parser/CarcaseParser.h"
 
+class Command {
 public:
-    virtual ~Command() {}
+    virtual ~Command() = default;
     virtual void execute() = 0;
 };
 

@@ -8,17 +8,15 @@
 #include "point.h"
 #include "edge.h"
 #include "../vector/_vector.h"
+#include "BaseModel.h"
 
 #include <math.h>
 
 #define PI      3.14159265
 #define DEGREES 180
 
-class Model {
+class CarcaseModel : public BaseModel {
 private:
-    MyVector<Point> points;
-    MyVector<Edge> edges;
-
     void rotateX(double xa) {
         double tmp_y;
         double tmp_z;
@@ -59,17 +57,19 @@ private:
     }
 
 public:
-    Model() = default;
+    CarcaseModel() = default;
 
-    Model(MyVector<Point> points, MyVector<Edge> edges) {
+    CarcaseModel(MyVector<Point> points, MyVector<Edge> edges) {
         this->points = points;
         this->edges = edges;
     }
 
-    ~Model() = default;
+    ~CarcaseModel() = default;
 
-    MyVector<Point> getPoints() { return points; }
-    MyVector<Edge> getEdges() { return edges; }
+    void draw(Drawer &drawer) { drawer.drawEdges(points, edges); }
+
+    void setPoints(MyVector<Point> points) { this->points = points; }
+    void setEdges(MyVector<Edge> points) { this->edges = points; }
 
     void rotate(double xa, double ya, double za) {
         rotateX(xa);

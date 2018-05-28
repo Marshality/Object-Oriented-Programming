@@ -6,11 +6,12 @@
 #define LAB03_FILE_H
 
 #include "stdio.h"
-#include "./model/model.h"
+#include "BaseParser.h"
+#include "../model/CarcaseModel.h"
 #include <iostream>
-#include "exceptions.h"
+#include "../exception/exceptions.h"
 
-class Parser {
+class CarcaseParser : public BaseParser {
 private:
     FILE *file;
 
@@ -33,10 +34,12 @@ private:
     }
 
 public:
-    Parser(char *filename) { this->file = fopen(filename, "r"); }
-    ~Parser() { fclose(file); }
+    CarcaseParser() = default;
 
-    void parse(Model &model) {
+    CarcaseParser(const char *filename) { file = fopen(filename, "r"); };
+    ~CarcaseParser() {}
+
+    void parse(BaseModel &model) {
         int pointsCount = 0, edgesCount = 0;
 
         if (fscanf(file, "%d %d", &pointsCount, &edgesCount) != 2) throw corruptFileException();
@@ -48,8 +51,9 @@ public:
 
         for (int i = 0; i < edgesCount; i++) edges[i] = loadEdge();
 
-        model = Model(points, edges);
-    }
+        model.setPoints(points);
+        model.setEdges(edges);
+    };
 };
 
 #endif //LAB03_FILE_H
